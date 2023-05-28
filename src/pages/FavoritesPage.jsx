@@ -1,12 +1,18 @@
 import { Box, CircularProgress, Grid, Button } from "@mui/material";
 import { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+
 import axios from "axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import CardComponent from "../components/CardComponent";
 
 const FavoritesPage = () => {
   const [cardsArr, setCardsArr] = useState(null);
+  const navigate = useNavigate();
+  const payload = useSelector((bigPie) => bigPie.authSlice.payload);
 
   useEffect(() => {
     axios
@@ -20,6 +26,18 @@ const FavoritesPage = () => {
       });
   }, []);
 
+  const handleDeleteFromInitialCardsArr = async (id) => {
+    try {
+      await axios.delete("/cards/" + id);
+      setCardsArr((newCardsArr) =>
+        newCardsArr.filter((item) => item._id !== id)
+      );
+      toast.success("🦄 Card deleted :)");
+    } catch (err) {
+      console.log("error when deleting", err.response.data);
+    }
+  };
+
   const handleDeleteFromFavorites = async (id) => {
     try {
       await axios.patch(`cards/card-like/${id}`);
@@ -29,6 +47,15 @@ const FavoritesPage = () => {
       console.log("Error deleting card", err.response.data);
       toast.error("Failed to delete card");
     }
+  };
+
+  const handleEditFromInitialCardsArr = (id) => {
+    navigate(`/edit/${id}`);
+  };
+
+  const cardProfileClick = (id) => {
+    console.log("Clicked card id:", id);
+    navigate(`/cardData/${id}`);
   };
 
   return (
@@ -45,13 +72,24 @@ const FavoritesPage = () => {
                   subTitle={item.subTitle}
                   description={item.description}
                   img={item.image ? item.image.url : ""}
+                  onDelete={handleDeleteFromInitialCardsArr}
+                  onEdit={handleEditFromInitialCardsArr}
+                  canEdit={
+                    payload && payload.biz && payload._id === item.user_id
+                  }
+                  canDelete={
+                    (payload && payload.isAdmin) ||
+                    (payload && payload.biz && payload._id === item.user_id)
+                  }
+                  onImageClick={cardProfileClick}
                 />
                 <Button
                   variant="contained"
                   color="error"
                   onClick={() => handleDeleteFromFavorites(item._id)}
                 >
-                  Delete
+                  <FavoriteBorderIcon />
+                  Delete from favorites
                 </Button>
               </Grid>
             ))}
