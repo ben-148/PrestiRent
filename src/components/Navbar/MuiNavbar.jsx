@@ -13,6 +13,9 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 import Link from "@mui/icons-material/Link";
 import { Switch } from "@mui/material";
+import ModeNightIcon from "@mui/icons-material/ModeNight";
+import LightModeIcon from "@mui/icons-material/LightMode";
+
 import { NavLink, useNavigate } from "react-router-dom";
 
 import SearchPartial from "./SearchPartial";
@@ -161,7 +164,11 @@ const MuiNavbar = () => {
             <Typography sx={{ display: { xs: "none", md: "inline" } }}>
               {isDarkTheme ? "Dark" : "Light"} Mode
             </Typography>
-            <Switch checked={isDarkTheme} onChange={changeTheme} />
+            {isDarkTheme ? (
+              <ModeNightIcon onClick={changeTheme} />
+            ) : (
+              <LightModeIcon onClick={changeTheme} />
+            )}
           </Box>
           {/* hamburger with menu */}
           <Box
