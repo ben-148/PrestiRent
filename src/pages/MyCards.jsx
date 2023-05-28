@@ -99,6 +99,7 @@ const MyCardPage = () => {
                     (payload && payload.biz && payload._id === item.user_id)
                   }
                   isFav={favoriteStatus[item._id]}
+                  isItUsersCard={payload && payload._id === item.user_id}
                   onImageClick={cardProfileClick}
                 />
               </Grid>

@@ -73,6 +73,7 @@ const FavoritesPage = () => {
                   description={item.description}
                   img={item.image ? item.image.url : ""}
                   onDelete={handleDeleteFromInitialCardsArr}
+                  isItUsersCard={payload && payload._id === item.user_id}
                   onEdit={handleEditFromInitialCardsArr}
                   canEdit={
                     payload && payload.biz && payload._id === item.user_id

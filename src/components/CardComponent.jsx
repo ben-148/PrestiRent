@@ -18,6 +18,8 @@ const CardComponent = ({
   title,
   subTitle,
   description,
+  phone,
+  cardNumber,
   id,
   onDelete,
   onLike,
@@ -62,6 +64,8 @@ const CardComponent = ({
       <CardHeader title={title} subheader={subTitle}></CardHeader>
       <CardContent>
         <Typography>{description}</Typography>
+        <Typography>Phone: {phone}</Typography>
+        <Typography>Card Number: {cardNumber}</Typography>
       </CardContent>
       <CardActions>
         <Button variant="text" color="primary">
