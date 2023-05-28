@@ -126,57 +126,49 @@ const CardProfile = () => {
           {cardKeys.map((propOfCard) =>
             propOfCard !== "url" && propOfCard !== "alt" ? (
               <Grid key={propOfCard} item xs={12} sm={6} md={4}>
-                <Typography variant="h6" gutterBottom sx={{ color: "primary" }}>
-                  <Button
-                    color="info"
-                    variant="contained"
-                    disabled
-                    style={{ marginBottom: 10 }}
-                  >
-                    {propOfCard}
-                  </Button>
-                  {propOfCard === "bizNumber" ? (
-                    <Fragment>
-                      {bizNumberState ? (
-                        <Typography variant="h6">
-                          Business Number: {bizNumberState}
-                        </Typography>
-                      ) : (
-                        <Typography variant="h6">
-                          Business Number: {cardState.bizNumber}
-                        </Typography>
-                      )}
-                      <Button
-                        variant="contained"
-                        onClick={() =>
-                          handleAlertOpen(
-                            "Are you sure you want to change the card business number?"
-                          )
-                        }
-                        style={{ marginTop: 10 }}
-                      >
-                        Change Business Number
-                      </Button>
-                    </Fragment>
-                  ) : propOfCard === "web" ? (
-                    <Link
-                      href={cardState.web}
-                      underline="hover"
-                      target="_blank"
+                <Button
+                  color="info"
+                  variant="contained"
+                  disabled
+                  style={{ marginBottom: 10 }}
+                >
+                  {propOfCard}
+                </Button>
+                {propOfCard === "bizNumber" ? (
+                  <Fragment>
+                    {bizNumberState ? (
+                      <Typography variant="h6">
+                        Business Number: {bizNumberState}
+                      </Typography>
+                    ) : (
+                      <Typography variant="h6">
+                        Business Number: {cardState.bizNumber}
+                      </Typography>
+                    )}
+                    <Button
+                      variant="contained"
+                      onClick={() =>
+                        handleAlertOpen(
+                          "Are you sure you want to change the card business number?"
+                        )
+                      }
+                      style={{ marginTop: 10 }}
                     >
-                      Visit Website
-                    </Link>
-                  ) : propOfCard === "likes" ? (
-                    <Fragment>
-                      {cardState.likes.length}
-                      <FavoriteBorderIcon sx={{ ml: 1 }} color="error" />
-                    </Fragment>
-                  ) : (
-                    <Typography variant="h6">
-                      {cardState[propOfCard]}
-                    </Typography>
-                  )}
-                </Typography>
+                      Change Business Number
+                    </Button>
+                  </Fragment>
+                ) : propOfCard === "web" ? (
+                  <Link href={cardState.web} underline="hover" target="_blank">
+                    Visit Website
+                  </Link>
+                ) : propOfCard === "likes" ? (
+                  <Fragment>
+                    {cardState.likes.length}
+                    <FavoriteBorderIcon sx={{ ml: 1 }} color="error" />
+                  </Fragment>
+                ) : (
+                  <Typography variant="h6">{cardState[propOfCard]}</Typography>
+                )}
               </Grid>
             ) : null
           )}

@@ -12,7 +12,7 @@ import PropTypes from "prop-types";
 import { Fragment } from "react";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-
+import LocalPhoneIcon from "@mui/icons-material/LocalPhone";
 const CardComponent = ({
   img,
   title,
@@ -23,9 +23,11 @@ const CardComponent = ({
   onLike,
   onEdit,
   canEdit,
+  canDelete,
   loggedIn,
   isFav,
   onImageClick,
+  isItUsersCard,
 }) => {
   const handleDeleteBtnClick = () => {
     console.log("id", id);
@@ -46,6 +48,16 @@ const CardComponent = ({
     <Card square raised>
       <CardActionArea>
         <CardMedia component="img" image={img} onClick={handleImageBtnClick} />
+        {isItUsersCard ? (
+          <Typography component="h4" variant="h6" color="gold">
+            This Card Is Yours &#127775;
+          </Typography>
+        ) : (
+          <Typography component="h4" variant="h6">
+            {" "}
+            &#8192;
+          </Typography>
+        )}
       </CardActionArea>
       <CardHeader title={title} subheader={subTitle}></CardHeader>
       <CardContent>
@@ -53,15 +65,21 @@ const CardComponent = ({
       </CardContent>
       <CardActions>
         <Button variant="text" color="primary">
-          Buy now
+          <LocalPhoneIcon />
         </Button>
         {canEdit ? (
           <Fragment>
-            <Button variant="text" color="error" onClick={handleDeleteBtnClick}>
-              Delete
-            </Button>
             <Button variant="text" color="warning" onClick={handleEditBtnClick}>
               Edit
+            </Button>
+          </Fragment>
+        ) : (
+          ""
+        )}
+        {canDelete ? (
+          <Fragment>
+            <Button variant="text" color="error" onClick={handleDeleteBtnClick}>
+              Delete
             </Button>
           </Fragment>
         ) : (

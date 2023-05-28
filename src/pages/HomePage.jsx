@@ -158,10 +158,15 @@ const HomePage = () => {
               onDelete={handleDeleteFromInitialCardsArr}
               onEdit={handleEditFromInitialCardsArr}
               onLike={handleLikeFromInitialCardsArr}
-              canEdit={payload && (payload.biz || payload.isAdmin)}
+              canEdit={payload && payload.biz && payload._id === item.user_id}
               loggedIn={payload}
+              canDelete={
+                (payload && payload.isAdmin) ||
+                (payload && payload.biz && payload._id === item.user_id)
+              }
               isFav={favoriteStatus[item._id]}
               onImageClick={cardProfileClick}
+              isItUsersCard={payload && payload._id === item.user_id}
             />
           </Grid>
         ))}
