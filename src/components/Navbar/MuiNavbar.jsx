@@ -159,15 +159,13 @@ const MuiNavbar = () => {
             sx={{
               my: 2,
               p: 1,
+              cursor: "pointer",
             }}
           >
-            <Typography sx={{ display: { xs: "none", md: "inline" } }}>
-              {isDarkTheme ? "Dark" : "Light"} Mode
-            </Typography>
             {isDarkTheme ? (
-              <ModeNightIcon onClick={changeTheme} />
-            ) : (
               <LightModeIcon onClick={changeTheme} />
+            ) : (
+              <ModeNightIcon onClick={changeTheme} />
             )}
           </Box>
           {/* hamburger with menu */}
