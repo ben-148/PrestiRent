@@ -1,55 +1,123 @@
 import { useState } from "react";
+import * as React from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
+import CssBaseline from "@mui/material/CssBaseline";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import Alert from "@mui/material/Alert";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-import validateRegisterSchema from "../validation/registerValidation";
+import { Alert, Switch } from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import ROUTES from "../routes/ROUTES";
-
+import axios from "axios";
+import { toast } from "react-toastify";
+import validateRegisterSchema from "../validation/registerValidation";
+import RegisterFieldComponent from "../components/RegisterComponent";
+import FormButtonsComponent from "../components/FormButtonsComponent";
 const RegisterPage = () => {
+  const [enableRegister, setenableRegister] = useState(true);
+  const [isBiz, setIsBiz] = useState(false);
   const [inputState, setInputState] = useState({
     firstName: "",
+    middleName: "",
     lastName: "",
     email: "",
     password: "",
+    state: "",
+    country: "",
+    city: "",
+    street: "",
+    houseNumber: "",
+    zipCode: "",
+    phone: "",
+    biz: isBiz,
   });
-  const [inputsErrorsState, setInputsErrorsState] = useState(null);
+  const [inputsErrorsState, setInputsErrorsState] = useState({});
   const navigate = useNavigate();
+  const arrOfInputs = [
+    { inputName: "First Name", idAndKey: "firstName", isReq: true },
+    { inputName: "Middle Name", idAndKey: "middleName", isReq: false },
+    { inputName: "Last Name", idAndKey: "lastName", isReq: true },
+    { inputName: "Email", idAndKey: "email", isReq: true },
+    { inputName: "Password", idAndKey: "password", isReq: true },
+    { inputName: "State", idAndKey: "state", isReq: false },
+    { inputName: "Country", idAndKey: "country", isReq: true },
+    { inputName: "City", idAndKey: "city", isReq: true },
+    { inputName: "Street", idAndKey: "street", isReq: true },
+    { inputName: "House Number", idAndKey: "houseNumber", isReq: true },
+    { inputName: "Zip Code", idAndKey: "zipCode", isReq: false },
+    { inputName: "Phone", idAndKey: "phone", isReq: true },
+  ];
   const handleBtnClick = async (ev) => {
     try {
-      const joiResponse = validateRegisterSchema(inputState);
-      setInputsErrorsState(joiResponse);
-      if (joiResponse) {
+      const JoiResponse = validateRegisterSchema(inputState);
+      setInputsErrorsState(JoiResponse);
+      if (JoiResponse) {
         return;
       }
       await axios.post("/users/register", {
-        name: inputState.firstName + " " + inputState.lastName,
+        firstName: inputState.firstName,
+        middleName: inputState.middleName,
+        lastName: inputState.lastName,
         email: inputState.email,
         password: inputState.password,
+        state: inputState.state,
+        country: inputState.country,
+        city: inputState.city,
+        street: inputState.street,
+        houseNumber: inputState.houseNumber,
+        zipCode: inputState.zipCode,
+        phone: inputState.phone,
+        biz: isBiz,
       });
       navigate(ROUTES.LOGIN);
     } catch (err) {
-      console.log("error from axios", err.response.data);
+      toast.error(err.response.data);
     }
   };
   const handleInputChange = (ev) => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
+    const joiResponse = validateRegisterSchema(newInputState);
+    if (!joiResponse) {
+      setInputsErrorsState(joiResponse);
+      setenableRegister(false);
+      return;
+    }
+
+    const inputKeys = Object.keys(inputState);
+    for (const key of inputKeys) {
+      if (inputState && !inputState[key] && key !== ev.target.id) {
+        joiResponse[key] = "";
+      }
+    }
+    setInputsErrorsState(joiResponse);
+    setenableRegister(true);
+  };
+  const handleClearClick = () => {
+    const cloneInputState = JSON.parse(JSON.stringify(inputState));
+    const inputKeys = Object.keys(cloneInputState);
+    for (const key of inputKeys) {
+      if (typeof cloneInputState[key] === "string") {
+        cloneInputState[key] = "";
+      } else {
+        setIsBiz(false);
+      }
+    }
+    setInputsErrorsState(null);
+    setInputState(cloneInputState);
+  };
+  const handleBizChange = (ev) => {
+    setIsBiz(ev.target.checked);
+  };
+  const handleCancelBtnClick = (ev) => {
+    navigate(ROUTES.HOME);
   };
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="md">
+      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -66,103 +134,47 @@ const RegisterPage = () => {
         </Typography>
         <Box component="div" noValidate sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="given-name"
-                name="firstName"
-                required
-                fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-                value={inputState.firstName}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.firstName && (
-                <Alert severity="warning">
-                  {inputsErrorsState.firstName.map((item) => (
-                    <div key={"firstName-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="family-name"
-                value={inputState.lastName}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.lastName && (
-                <Alert severity="warning">
-                  {inputsErrorsState.lastName.map((item) => (
-                    <div key={"lastName-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
+            {arrOfInputs.map((input) => (
+              <Grid item xs={12} sm={6} key={input.inputName}>
+                <RegisterFieldComponent
+                  nameOfInput={input.inputName}
+                  typeofInput={input.idAndKey}
+                  isReq={input.isReq}
+                  onInputeChange={handleInputChange}
+                  value={inputState[input.idAndKey]}
+                />
+                {inputsErrorsState && inputsErrorsState[input.idAndKey] && (
+                  <Alert severity="warning">
+                    {inputsErrorsState[input.idAndKey].map((item) => (
+                      <div key={input.idAndKey + "-errors" + item}>{item}</div>
+                    ))}
+                  </Alert>
+                )}
+              </Grid>
+            ))}
             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                value={inputState.email}
-                onChange={handleInputChange}
+              <Switch
+                checked={isBiz}
+                color="primary"
+                onChange={handleBizChange}
+                label="Business ?"
               />
-              {inputsErrorsState && inputsErrorsState.email && (
-                <Alert severity="warning">
-                  {inputsErrorsState.email.map((item) => (
-                    <div key={"email-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="password"
-                label="Password"
-                type="password"
-                id="password"
-                autoComplete="new-password"
-                value={inputState.password}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.password && (
-                <Alert severity="warning">
-                  {inputsErrorsState.password.map((item) => (
-                    <div key={"password-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <FormControlLabel
-                control={<Checkbox value="allowExtraEmails" color="primary" />}
-                label="I want to receive inspiration, marketing promotions and updates via email."
-              />
+              Business ?
             </Grid>
           </Grid>
-          <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleBtnClick}
-          >
-            Sign Up
-          </Button>
-          <Grid container justifyContent="flex-end">
+          <FormButtonsComponent
+            onCancel={handleCancelBtnClick}
+            onReset={handleClearClick}
+            onRegister={handleBtnClick}
+            clickBtnText="Sign In"
+            disableProp={enableRegister}
+          />
+          <Grid container justifyContent="flex-start">
             <Grid item>
-              <Link href="#" variant="body2">
-                Already have an account? Sign in
+              <Link to={ROUTES.LOGIN}>
+                <Typography variant="body2">
+                  Alredy have an account ? Sign In
+                </Typography>
               </Link>
             </Grid>
           </Grid>
@@ -172,3 +184,20 @@ const RegisterPage = () => {
   );
 };
 export default RegisterPage;
+/* <Button
+            disabled={enableRegister}
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={handleBtnClick}
+          >
+            Sign Up
+          </Button>
+          <Button
+            color="error"
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+            onClick={handleClearClick}
+            startIcon={<ClearIcon />}
+          >
+            Clear
+          </Button> */

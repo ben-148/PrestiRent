@@ -1,9 +1,11 @@
-import { Box, CircularProgress, Grid, Button } from "@mui/material";
+import { Box, CircularProgress, Grid, Button, IconButton } from "@mui/material";
 import { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import AddIcon from "@mui/icons-material/Add";
+import ROUTES from "../routes/ROUTES";
 
 import CardComponent from "../components/CardComponent";
 
@@ -73,6 +75,10 @@ const MyCardPage = () => {
     navigate(`/cardData/${id}`);
   };
 
+  const handleClickOpen = () => {
+    navigate(ROUTES.CREATE);
+  };
+
   return (
     <Fragment>
       <h1>My Cards</h1>
@@ -116,6 +122,14 @@ const MyCardPage = () => {
           </div>
         )}
       </Box>
+      <IconButton
+        color="inherit"
+        size="medium"
+        style={{ float: "right" }}
+        onClick={handleClickOpen}
+      >
+        <AddIcon /> Add Card
+      </IconButton>{" "}
     </Fragment>
   );
 };
