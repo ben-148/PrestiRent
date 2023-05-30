@@ -10,6 +10,7 @@ const ROUTES = {
   FAV: "/favorites",
   MYCARDS: "/my-cards",
   SANDBOX: "/sandbox",
+  CRM: "/crm",
 };
 
 export default ROUTES;
