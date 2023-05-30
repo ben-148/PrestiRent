@@ -26,6 +26,7 @@ import FavoritesPage from "../pages/FavoritesPage";
 import MyCardPage from "../pages/MyCards";
 import SandboxPage from "../pages/SandboxPage";
 import CardProfile from "../pages/CardProfilePage";
+import CreateCardForm from "../pages/CreateCardPage2";
 
 //element={<ProtectedRoute element={<LogoutPage />} />}
 
@@ -69,7 +70,7 @@ const Router = () => {
           <SuperProtectedRoute
             isAdmin={false}
             isBiz={true}
-            element={<CreateCardPage />}
+            element={<CreateCardForm />}
           />
         }
       />

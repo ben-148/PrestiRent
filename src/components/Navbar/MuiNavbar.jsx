@@ -61,10 +61,6 @@ const authedPages = [
 //admin/biz pages
 const bizPage = [
   {
-    label: "Create",
-    url: ROUTES.CREATE,
-  },
-  {
     label: "My-Cards",
     url: ROUTES.MYCARDS,
   },
