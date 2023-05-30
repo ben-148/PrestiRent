@@ -19,45 +19,39 @@ import { CircularProgress } from "@mui/material";
 import atom from "../logo.svg";
 import { toast } from "react-toastify";
 
+import EditCardPageFieldComponent from "../components/EditCardPageComponent";
+import FormButtonsComponent from "../components/FormButtonsComponent";
 const EditCardPage = () => {
   const { id } = useParams();
-  /*
-    router: /edit/:id
-    url: /edit/magafaiim
-    params = {
-      id: "magafaiim"
-    }
-    const params = useParams()
-    const id = params.id
-  */
   const [inputState, setInputState] = useState(null);
-  // const [inputState, setInputState] = useState({
-  //   img: "",
-  //   title: "",
-  //   price: "",
-  //   description: "",
-  // });
+  const [disableEd, setDisableEdit] = useState(false);
   const [inputsErrorsState, setInputsErrorsState] = useState({});
   const navigate = useNavigate();
-  /*
-    const params = useParams();
-    params = {
-      id:1
-    }
-    const id = params.id
-  */
+  const arrOfInputs = [
+    { inputName: "Title", idAndKey: "title", isReq: true },
+    { inputName: "Sub Title", idAndKey: "subTitle", isReq: true },
+    { inputName: "Description", idAndKey: "description", isReq: true },
+    { inputName: "State", idAndKey: "state", isReq: false },
+    { inputName: "Country", idAndKey: "country", isReq: true },
+    { inputName: "City", idAndKey: "city", isReq: true },
+    { inputName: "Street", idAndKey: "street", isReq: true },
+    { inputName: "House Number", idAndKey: "houseNumber", isReq: true },
+    { inputName: "ZIP Code", idAndKey: "zipCode", isReq: false },
+    { inputName: "Phone", idAndKey: "phone", isReq: true },
+    { inputName: "Email", idAndKey: "email", isReq: true },
+    { inputName: "Web Page URL", idAndKey: "web", isReq: false },
+    { inputName: "Image URL", idAndKey: "url", isReq: false },
+    { inputName: "Image Alt", idAndKey: "alt", isReq: false },
+  ];
   useEffect(() => {
     (async () => {
       try {
         const errors = validateEditCardParamsSchema({ id });
         if (errors) {
-          // there was errors = incorrect id
           navigate("/");
           return;
         }
         const { data } = await axios.get("/cards/card/" + id);
-        console.log("data", data);
-
         let newInputState = {
           ...data,
         };
@@ -79,6 +73,9 @@ const EditCardPage = () => {
         delete newInputState.createdAt;
         delete newInputState.__v;
         setInputState(newInputState);
+        if (!validateEditSchema(newInputState)) {
+          setDisableEdit(false);
+        }
       } catch (err) {
         console.log("error from axios", err);
       }
@@ -88,34 +85,56 @@ const EditCardPage = () => {
     try {
       const joiResponse = validateEditSchema(inputState);
       setInputsErrorsState(joiResponse);
-      console.log(joiResponse);
       if (!joiResponse) {
-        //move to homepage
         await axios.put("/cards/" + id, inputState);
         toast.success("🦄 You did it! edit success :) ");
 
         navigate(ROUTES.HOME);
       }
     } catch (err) {
-      console.log("err", err);
-      toast.error("errrrrrrrrrrrrrrrror");
+      console.log("err", err.response.data);
+      toast.error("error");
     }
   };
-
+  const handleClearClick = () => {
+    const cloneInputState = JSON.parse(JSON.stringify(inputState));
+    const inputKeys = Object.keys(cloneInputState);
+    for (const key of inputKeys) {
+      if (typeof cloneInputState[key] === "string") {
+        cloneInputState[key] = "";
+      }
+    }
+    setInputsErrorsState(null);
+    setInputState(cloneInputState);
+  };
   const handleCancelBtnClick = (ev) => {
-    //move to homepage
     navigate(ROUTES.HOME);
   };
   const handleInputChange = (ev) => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
     setInputState(newInputState);
+    const joiResponse = validateEditSchema(newInputState);
+    if (!joiResponse) {
+      setInputsErrorsState(joiResponse);
+      setDisableEdit(false);
+      return;
+    }
+    setDisableEdit(true);
+    const inputKeys = Object.keys(inputState);
+    for (const key of inputKeys) {
+      if (inputState && !inputState[key] && key !== ev.target.id) {
+        if (joiResponse[key]) {
+          joiResponse[key] = "";
+        }
+      }
+    }
+    setInputsErrorsState(joiResponse);
   };
 
   if (!inputState) {
     return <CircularProgress />;
   }
-
   return (
     <Container component="main" maxWidth="xs">
       <Box
@@ -143,259 +162,34 @@ const EditCardPage = () => {
           alt={inputState.alt ? inputState.alt : ""}
           src={inputState.url ? inputState.url : atom}
         />
-        <Box component="div" noValidate sx={{ mt: 3 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                id="url"
-                label="Url"
-                name="url"
-                autoComplete="url"
-                value={inputState.url}
-                onChange={handleInputChange}
+        <br></br>
+        <Grid container spacing={2}>
+          {arrOfInputs.map((input) => (
+            <Grid item xs={12} sm={6} key={input.inputName}>
+              <EditCardPageFieldComponent
+                nameOfInput={input.inputName}
+                typeofInput={input.idAndKey}
+                isReq={input.isReq}
+                onInputeChange={handleInputChange}
+                value={inputState[input.idAndKey]}
               />
-              {inputsErrorsState && inputsErrorsState.url && (
+              {inputsErrorsState && inputsErrorsState[input.idAndKey] && (
                 <Alert severity="warning">
-                  {inputsErrorsState.url.map((item) => (
-                    <div key={"url-errors" + item}>{item}</div>
+                  {inputsErrorsState[input.idAndKey].map((item) => (
+                    <div key={input.idAndKey + "-errors" + item}>{item}</div>
                   ))}
                 </Alert>
               )}
             </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="title"
-                label="Title"
-                name="title"
-                autoComplete="title"
-                value={inputState.title}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.title && (
-                <Alert severity="warning">
-                  {inputsErrorsState.title.map((item) => (
-                    <div key={"title-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="subTitle"
-                label="Sub title"
-                type="text"
-                id="subTitle"
-                autoComplete="subTitle"
-                value={inputState.subTitle}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.subTitle && (
-                <Alert severity="warning">
-                  {inputsErrorsState.subTitle.map((item) => (
-                    <div key={"subTitle-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="description"
-                label="Description"
-                id="description"
-                autoComplete="description"
-                value={inputState.description}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.description && (
-                <Alert severity="warning">
-                  {inputsErrorsState.description.map((item) => (
-                    <div key={"description-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            {/*             <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="country"
-                label="country"
-                id="country"
-                autoComplete="country"
-                value={inputState.country}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.country && (
-                <Alert severity="warning">
-                  {inputsErrorsState.country.map((item) => (
-                    <div key={"country-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
- */}{" "}
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="E-Mail"
-                label="E-Mail"
-                id="email"
-                autoComplete="E-Mail"
-                value={inputState.email}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.email && (
-                <Alert severity="warning">
-                  {inputsErrorsState.email.map((item) => (
-                    <div key={"email-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="country"
-                label="country"
-                id="country"
-                autoComplete="country"
-                value={inputState.country}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.country && (
-                <Alert severity="warning">
-                  {inputsErrorsState.country.map((item) => (
-                    <div key={"country-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="city"
-                label="city"
-                id="city"
-                autoComplete="city"
-                value={inputState.city}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.city && (
-                <Alert severity="warning">
-                  {inputsErrorsState.city.map((item) => (
-                    <div key={"city-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="street"
-                label="street"
-                id="street"
-                autoComplete="street"
-                value={inputState.street}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.street && (
-                <Alert severity="warning">
-                  {inputsErrorsState.street.map((item) => (
-                    <div key={"street-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="House Number"
-                label="House Number"
-                id="houseNumber"
-                autoComplete="House Number"
-                value={inputState.houseNumber}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.houseNumber && (
-                <Alert severity="warning">
-                  {inputsErrorsState.houseNumber.map((item) => (
-                    <div key={"description-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="phone"
-                label="Phone"
-                id="phone"
-                autoComplete="phone"
-                value={inputState.phone}
-                onChange={handleInputChange}
-              />
-              {inputsErrorsState && inputsErrorsState.description && (
-                <Alert severity="warning">
-                  {inputsErrorsState.description.map((item) => (
-                    <div key={"description-errors" + item}>{item}</div>
-                  ))}
-                </Alert>
-              )}
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={handleSaveBtnClick}
-              >
-                Save
-              </Button>
-            </Grid>
-            <Grid item xs={6}>
-              <Button
-                fullWidth
-                variant="contained"
-                sx={{ mt: 3, mb: 2 }}
-                onClick={handleCancelBtnClick}
-              >
-                Cancel
-              </Button>
-            </Grid>
-          </Grid>
-          {/* <Button
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={() => {
-              navigate("/edit/2");
-            }}
-          >
-            edit 2
-          </Button> */}
-          {/* <Grid container justifyContent="flex-end">
-            <Grid item>
-              <Link to={ROUTES.REGISTER}>
-                <Typography variant="body2">
-                  Did not have an account? Sign up
-                </Typography>
-              </Link>
-            </Grid>
-          </Grid> */}
-        </Box>
+          ))}
+        </Grid>
+        <FormButtonsComponent
+          onCancel={handleCancelBtnClick}
+          onReset={handleClearClick}
+          onRegister={handleSaveBtnClick}
+          clickBtnText="Save"
+          disableProp={disableEd}
+        />
       </Box>
     </Container>
   );
