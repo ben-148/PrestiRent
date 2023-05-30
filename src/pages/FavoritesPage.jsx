@@ -60,7 +60,9 @@ const FavoritesPage = () => {
 
   return (
     <Fragment>
-      <h1>Favorites page</h1>
+      <Box textAlign="center">
+        <h1>Your Favorite Cards</h1>
+      </Box>
       <Box>
         <Grid container spacing={2}>
           {Array.isArray(cardsArr) &&
