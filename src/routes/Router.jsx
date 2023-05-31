@@ -27,6 +27,8 @@ import MyCardPage from "../pages/MyCards";
 import SandboxPage from "../pages/SandboxPage";
 import CardProfile from "../pages/CardProfilePage";
 import CreateCardForm from "../pages/CreateCardPage2";
+import ProfileDataPage from "../pages/ProfileDataPage";
+import UsersTable from "../pages/CRMPage";
 
 //element={<ProtectedRoute element={<LogoutPage />} />}
 
@@ -84,6 +86,28 @@ const Router = () => {
           />
         }
       />
+      <Route
+        path={ROUTES.PROFILECRM + "/:id"}
+        element={
+          <SuperProtectedRoute
+            isAdmin={true}
+            isBiz={false}
+            element={<ProfileDataPage />}
+          />
+        }
+      />
+
+      <Route
+        path={ROUTES.CRM}
+        element={
+          <SuperProtectedRoute
+            isAdmin={true}
+            isBiz={false}
+            element={<UsersTable />}
+          />
+        }
+      />
+
       <Route
         path={ROUTES.SANDBOX}
         element={
