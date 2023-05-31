@@ -12,7 +12,7 @@ import ProtectedRoute from "../components/ProtectedRoute";
 import ProfilePage from "../pages/ProfilePage";
 import SuperProtectedRoute from "../components/SuperProtectedRoute";
 import LogoutPage from "../pages/LogoutPage";
-import NestedRoutePage from "../pages/NestedRoutePage";
+import NestedRoutePage from "../pages/NestedRoutePage/NestedRoutePage";
 import NestedPage1 from "../pages/NestedRoutePage/NestedPage1";
 import NestedPage2 from "../pages/NestedRoutePage/NestedPage2";
 import MenuPage from "../pages/MenuPage";
@@ -89,25 +89,19 @@ const Router = () => {
         element={
           <SuperProtectedRoute
             isAdmin={true}
-            isBiz={true || false}
+            isBiz={false || true}
             element={<SandboxPage />}
           />
         }
-      />
-      <Route path="/rrp" element={<ReRenderPage />} />
-      <Route path="/usememo" element={<UseMemoPage />} />
-      <Route path="/rp1" element={<RP1 />} />
-      <Route path="/rp2" element={<RP2 />} />
-      <Route path="/nr" element={<NestedRoutePage />}>
-        <Route path="nestedpage1" element={<NestedPage1 />} />
-        <Route path="nestedpage2" element={<NestedPage2 />} />
+      >
+        <Route path="nr" element={<NestedRoutePage />}>
+          <Route path="nestedpage1" element={<NestedPage1 />} />
+          <Route path="nestedpage2" element={<NestedPage2 />} />
+        </Route>
+        <Route path="rerender" element={<ReRenderPage />} />
+        <Route path="redux1" element={<RP1 />} />
+        <Route path="redux2" element={<RP2 />} />
       </Route>
-      <Route path="/menu-test" element={<MenuPage />} />
-      <Route
-        path="/rrd1"
-        element={<ProtectedRouteState element={<RRDPage1 />} />}
-      />
-      <Route path="/rrd2" element={<RRDPage2 />} />
       <Route path="*" element={<h1>404</h1>} />
     </Routes>
   );
