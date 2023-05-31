@@ -30,7 +30,7 @@ const pages = [
   { label: "About", url: ROUTES.ABOUT },
 ];
 
-//not logged in users
+// not logged in users
 const notAuthPages = [
   {
     label: "Register",
@@ -42,7 +42,7 @@ const notAuthPages = [
   },
 ];
 
-//logged in users
+// logged in users
 const authedPages = [
   {
     label: "Favorites",
@@ -59,18 +59,9 @@ const avatarMenu = [
     label: "Logout",
     url: ROUTES.LOGOUT,
   },
-  /*   {
-    label: "Sand Box",
-    url: ROUTES.SANDBOX,
-  },
-  {
-    label: "CRM",
-    url: ROUTES.CRM,
-  },
- */
 ];
 
-//biz pages
+// biz pages
 const bizPage = [
   {
     label: "My-Cards",
@@ -98,8 +89,7 @@ const MuiNavbar = () => {
   const navigate = useNavigate();
   const isAdmin = payload && payload.isAdmin;
   const isBiz = payload && payload.biz;
-  console.log("🚀 ~ file: MuiNavbar.jsx:99 ~ MuiNavbar ~ isBiz:", isBiz);
-  console.log("🚀 ~ file: MuiNavbar.jsx:98 ~ MuiNavbar ~ isAdmin:", isAdmin);
+
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const dispatch = useDispatch();
   const isDarkTheme = useSelector(
@@ -123,6 +113,28 @@ const MuiNavbar = () => {
     dispatch(authActions.logout());
   };
 
+  const renderPages = () => {
+    const allPages = [...pages];
+
+    if (isLoggedIn) {
+      allPages.push(...authedPages);
+    } else {
+      allPages.push(...notAuthPages);
+    }
+
+    if (isBiz) {
+      allPages.push(...bizPage);
+    }
+
+    if (isAdmin) {
+      allPages.push(...adminPages);
+    }
+
+    return allPages.map((page) => (
+      <NavLinkComponent key={page.url} {...page} />
+    ));
+  };
+
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
@@ -132,7 +144,7 @@ const MuiNavbar = () => {
             noWrap
             sx={{
               display: { xs: "none", md: "inline" },
-              cursor: "pointer", // Add cursor style
+              cursor: "pointer",
             }}
             onClick={() => navigate(ROUTES.HOME)}
           >
@@ -140,36 +152,11 @@ const MuiNavbar = () => {
               src={`${process.env.PUBLIC_URL}/favicon.ico`}
               alt="Favicon"
               style={{ marginRight: "8px", width: "24px", height: "24px" }}
-            />{" "}
+            />
           </Typography>
           {/* main navbar */}
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <NavLinkComponent key={page.url} {...page} />
-            ))}
-            {isLoggedIn
-              ? authedPages.map((page) =>
-                  page.url === ROUTES.LOGOUT ? (
-                    <NavLinkComponent
-                      key={page.url}
-                      {...page}
-                      onClick={logoutClick}
-                    />
-                  ) : (
-                    <NavLinkComponent key={page.url} {...page} />
-                  )
-                )
-              : notAuthPages.map((page) => (
-                  <NavLinkComponent key={page.url} {...page} />
-                ))}
-            {isBiz &&
-              bizPage.map((page) => (
-                <NavLinkComponent key={page.url} {...page} />
-              ))}
-            {isAdmin &&
-              adminPages.map((page) => (
-                <NavLinkComponent key={page.url} {...page} />
-              ))}
+            {renderPages()}
           </Box>
           <SearchPartial />
           <Box
@@ -209,8 +196,8 @@ const MuiNavbar = () => {
               authedPagesProp={authedPages}
               logoutClickProp={logoutClick}
               notAuthPagesProp={notAuthPages}
-              isAdminProp={payload && payload.isAdmin}
-              isBizProp={payload && payload.biz}
+              isAdminProp={isAdmin}
+              isBizProp={isBiz}
               adminPagesArr={adminPages}
               bizPagesArr={bizPage}
             />

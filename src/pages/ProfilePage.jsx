@@ -16,8 +16,15 @@ import EditProfileFieldComponent from "../components/EditProfileComponent";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import FormButtonsComponent from "../components/FormButtonsComponent";
+import useLoggedIn from "../hooks/useLoggedIn";
+import { useDispatch } from "react-redux";
+import { authActions } from "../store/auth";
+
 const ProfilePage = () => {
   const [isBiz, setIsBiz] = useState(false);
+  const loggedIn = useLoggedIn();
+  const dispatch = useDispatch();
+
   const [inputState, setInputState] = useState({
     firstName: "",
     middleName: "",
@@ -30,7 +37,7 @@ const ProfilePage = () => {
     houseNumber: "",
     zipCode: "",
     phone: "",
-    biz: false,
+    biz: isBiz,
   });
   const [inputsErrorsState, setInputsErrorsState] = useState({});
   const navigate = useNavigate();
@@ -52,8 +59,8 @@ const ProfilePage = () => {
     (async () => {
       try {
         const { data } = await axios.get("/users/userInfo/");
-        console.log("🚀 ~ file: ProfilePage.jsx:55 ~ data:", data);
         setInputState(data);
+        setIsBiz(data.biz);
       } catch (err) {
         console.log("error from axios", err.response.data);
       }
@@ -72,9 +79,6 @@ const ProfilePage = () => {
       if (joiResponse) {
         return;
       }
-      if (!inputState.zipCode) {
-        inputState.zipCode = 1;
-      }
       await axios.put("/users/userInfo", {
         firstName: inputState.firstName,
         middleName: inputState.middleName,
@@ -89,7 +93,13 @@ const ProfilePage = () => {
         phone: inputState.phone,
         biz: isBiz,
       });
-      navigate(ROUTES.HOME);
+      localStorage.clear();
+      dispatch(authActions.logout());
+      toast.success(
+        `The update was successful. please log in to apply the changes`
+      );
+
+      navigate(ROUTES.LOGIN);
     } catch (err) {
       toast.error(err.response.data);
     }
@@ -105,7 +115,7 @@ const ProfilePage = () => {
     }
     const inputKeys = Object.keys(inputState);
     for (const key of inputKeys) {
-      if (inputState && !inputState[key] && key != ev.target.id) {
+      if (inputState && !inputState[key] && key !== ev.target.id) {
         joiResponse[key] = "";
       }
     }
