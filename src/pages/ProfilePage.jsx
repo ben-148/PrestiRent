@@ -19,6 +19,7 @@ import FormButtonsComponent from "../components/FormButtonsComponent";
 import useLoggedIn from "../hooks/useLoggedIn";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store/auth";
+import reconfigurationUser from "../utils/recofigurationUser";
 
 const ProfilePage = () => {
   const [isBiz, setIsBiz] = useState(false);
@@ -79,31 +80,22 @@ const ProfilePage = () => {
       if (joiResponse) {
         return;
       }
-      await axios.put("/users/userInfo", {
-        firstName: inputState.firstName,
-        middleName: inputState.middleName,
-        lastName: inputState.lastName,
-        email: inputState.email,
-        state: inputState.state,
-        country: inputState.country,
-        city: inputState.city,
-        street: inputState.street,
-        houseNumber: inputState.houseNumber,
-        zipCode: inputState.zipCode,
-        phone: inputState.phone,
-        biz: isBiz,
-      });
-      localStorage.clear();
-      dispatch(authActions.logout());
-      toast.success(
-        `The update was successful. please log in to apply the changes`
+      localStorage.setItem(
+        "token",
+        (await axios.put("/users/userInfo", reconfigurationUser(inputState)))
+          .data.token
       );
-
-      navigate(ROUTES.LOGIN);
+      loggedIn();
+      // Display a success message
+      toast.success(`The update was successful`);
+      navigate(ROUTES.HOME);
     } catch (err) {
+      console.log(err);
+      // Display an error message if the update fails
       toast.error(err.response.data);
     }
   };
+
   const handleInputChange = (ev) => {
     let newInputState = JSON.parse(JSON.stringify(inputState));
     newInputState[ev.target.id] = ev.target.value;
@@ -138,7 +130,12 @@ const ProfilePage = () => {
     setInputState(cloneInputState);
   };
   const handleBizChange = (ev) => {
-    setIsBiz(ev.target.checked);
+    const newValue = ev.target.checked;
+    setIsBiz(newValue);
+    setInputState((prevState) => ({
+      ...prevState,
+      biz: newValue,
+    }));
   };
   delete inputState.middleName;
 
