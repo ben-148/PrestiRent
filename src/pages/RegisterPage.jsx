@@ -56,6 +56,9 @@ const RegisterPage = () => {
       if (JoiResponse) {
         return;
       }
+      if (!inputState.zipCode) {
+        inputState.zipCode = 1;
+      }
       await axios.post("/users/register", {
         firstName: inputState.firstName,
         middleName: inputState.middleName,
