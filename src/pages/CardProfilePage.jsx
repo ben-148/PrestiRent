@@ -104,7 +104,7 @@ const CardProfile = () => {
       <Box sx={{ mt: 3 }}>
         <Button variant="outlined" onClick={handleCancelBtnClick}>
           <FirstPageIcon />
-          Back to Home
+          Back Home
         </Button>
       </Box>
       <Box

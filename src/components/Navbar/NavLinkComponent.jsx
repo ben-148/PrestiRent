@@ -1,32 +1,36 @@
 import { NavLink } from "react-router-dom";
-import Typography from "@mui/material/Typography";
+import { Typography } from "@mui/material";
+import { styled } from "@mui/system";
 
-/* <NavLinkComponent url="http://......" label="something" onClick={handleOnClick} className="red-back-ground" />
-   url, label, onClick, className
+const StyledNavLink = styled(NavLink)(({ theme }) => ({
+  textDecoration: "none",
+  "&.active": {
+    color: theme.palette.primary.main,
+    backgroundColor: theme.palette.primary.light,
+    borderRadius: theme.shape.borderRadius,
+    transition: "background-color 0.3s ease",
+  },
+}));
 
-  rest = {
-    onCLick,
-    className
-  }
-*/
+const StyledTypography = styled(Typography)(({ theme }) => ({
+  fontWeight: 600,
+  fontSize: "1.2rem",
+}));
 
 const NavLinkComponent = ({ url, label, ...rest }) => {
   return (
-    // <NavLink to={url} onClick={onClick} className={className}>
-    <NavLink to={url} {...rest}>
-      {({ isActive }) => (
-        <Typography
-          sx={{
-            my: 2,
-            display: "block",
-            p: 2,
-          }}
-          color={isActive ? "warning.main" : "text.primary"}
-        >
-          {label}
-        </Typography>
-      )}
-    </NavLink>
+    <StyledNavLink to={url} {...rest}>
+      <StyledTypography
+        component="div"
+        sx={{
+          my: 2,
+          display: "block",
+          p: 2,
+        }}
+      >
+        {label}
+      </StyledTypography>
+    </StyledNavLink>
   );
 };
 
