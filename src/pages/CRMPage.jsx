@@ -34,7 +34,7 @@ const CRMPage = () => {
     });
   };
 
-  const handleEditUser = async (ev) => {
+  const handleUserMode = async (ev) => {
     try {
       let newUsersArr = JSON.parse(JSON.stringify(users));
       let currentUser = newUsersArr.find((user) => user._id === ev.target.id);
@@ -75,14 +75,15 @@ const CRMPage = () => {
       <Typography variant="h2" color="primary" align="center">
         CRM Admin Panel
       </Typography>
-      <Typography variant="h6" color="primary">
-        Welcome to the CRM Admin Panel, your central hub for efficiently
-        managing and organizing user information. This powerful tool empowers
-        you to effortlessly classify users as business or non-business users,
-        providing you with comprehensive control over their profiles and access
-        privileges. With a user-friendly interface and a robust table displaying
-        all the essential user data, this admin panel simplifies the process of
-        tracking and organizing user information.
+      <Typography variant="h6" color="warning">
+        Introducing the CRM Administrator Dashboard, your centralized command
+        center for effectively overseeing and arranging user data. This dynamic
+        solution enables you to easily categorize individuals as either
+        corporate or non-corporate users, granting you extensive authority over
+        their profiles and permissions. Featuring an intuitive interface and a
+        strong table presenting all crucial user details, this administrative
+        dashboard streamlines the task of monitoring and structuring user
+        information.
       </Typography>
       <br />
       <Divider></Divider>
@@ -94,8 +95,9 @@ const CRMPage = () => {
               <TableCell>ID</TableCell>
               <TableCell>Name</TableCell>
               <TableCell>Email</TableCell>
-              <TableCell>Businness</TableCell>
+              <TableCell>Type of Account</TableCell>
               <TableCell>Actions</TableCell>
+              <TableCell>Is Admin?</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,8 +108,7 @@ const CRMPage = () => {
                   <TableCell>{user.firstName}</TableCell>
                   <TableCell>{user.email}</TableCell>
                   <TableCell>
-                    {" "}
-                    {user.biz ? "business" : "not business"}
+                    {user.biz ? "business account" : "simple user"}
                   </TableCell>
                   <TableCell>
                     {!user.isAdmin && (
@@ -115,15 +116,15 @@ const CRMPage = () => {
                         <Button
                           id={user._id}
                           variant="contained"
-                          color="primary"
-                          onClick={handleEditUser}
+                          color="warning"
+                          onClick={handleUserMode}
                         >
                           Change Business Mode
                         </Button>
                         <Button
                           id={user._id}
                           variant="contained"
-                          color="secondary"
+                          color="error"
                           onClick={() => handleDeleteUser(user._id)}
                         >
                           Delete
@@ -133,22 +134,23 @@ const CRMPage = () => {
                     <Button
                       id={user._id}
                       variant="contained"
-                      color="secondary"
+                      color="success"
                       onClick={whenUserClicked}
                     >
-                      Show more detailes
+                      Show more details
                     </Button>
                   </TableCell>
+                  <TableCell>{user.isAdmin ? "Yes" : "No"}</TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4}>No users found</TableCell>
+                <TableCell colSpan={6}>No users found</TableCell>
               </TableRow>
             )}
           </TableBody>
         </Table>
-      </TableContainer>
+      </TableContainer>{" "}
     </div>
   );
 };
