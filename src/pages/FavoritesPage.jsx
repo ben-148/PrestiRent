@@ -104,6 +104,16 @@ const FavoritesPage = () => {
               </Grid>
             ))}
         </Grid>
+        {!cardsArr && (
+          <div style={{ textAlign: "center" }}>
+            <CircularProgress />
+          </div>
+        )}
+        {Array.isArray(cardsArr) && cardsArr.length === 0 && (
+          <div style={{ textAlign: "center" }}>
+            <h3>No cards found</h3>
+          </div>
+        )}
       </Box>
     </Fragment>
   );
