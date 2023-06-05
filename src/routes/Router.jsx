@@ -15,7 +15,6 @@ import LogoutPage from "../pages/LogoutPage";
 import NestedRoutePage from "../pages/NestedRoutePage/NestedRoutePage";
 import NestedPage1 from "../pages/NestedRoutePage/NestedPage1";
 import NestedPage2 from "../pages/NestedRoutePage/NestedPage2";
-import MenuPage from "../pages/MenuPage";
 import RRDPage1 from "../pages/RRDPage1";
 import RRDPage2 from "../pages/RRDPage2";
 import ProtectedRouteState from "../guard/ProtectedRouteState";
