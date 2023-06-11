@@ -17,14 +17,11 @@ import { toast } from "react-toastify";
 import { useEffect } from "react";
 import FormButtonsComponent from "../components/FormButtonsComponent";
 import useLoggedIn from "../hooks/useLoggedIn";
-import { useDispatch } from "react-redux";
-import { authActions } from "../store/auth";
 import reconfigurationUser from "../utils/recofigurationUser";
 
 const ProfilePage = () => {
   const [isBiz, setIsBiz] = useState(false);
   const loggedIn = useLoggedIn();
-  const dispatch = useDispatch();
 
   const [inputState, setInputState] = useState({
     firstName: "",

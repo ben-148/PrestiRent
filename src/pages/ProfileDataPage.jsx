@@ -75,10 +75,11 @@ const ProfileDataPage = () => {
         biz: !currentUser.biz,
       });
       currentUser.biz = !currentUser.biz;
-      newUsersArr.map((user) => {
+      newUsersArr = newUsersArr.map((user) => {
         if (user._id === currentUser._id) {
-          user = { ...currentUser };
+          return { ...currentUser };
         }
+        return user;
       });
       setIsBiz(currentUser.biz);
     } catch (err) {

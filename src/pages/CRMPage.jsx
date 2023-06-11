@@ -55,10 +55,11 @@ const CRMPage = () => {
         biz: !currentUser.biz,
       });
       currentUser.biz = !currentUser.biz;
-      newUsersArr.map((user) => {
+      newUsersArr = newUsersArr.map((user) => {
         if (user._id === currentUser._id) {
-          user = { ...currentUser };
+          return { ...currentUser };
         }
+        return user;
       });
       setUsers(newUsersArr);
     } catch (err) {
@@ -119,7 +120,9 @@ const CRMPage = () => {
                           color="warning"
                           onClick={handleUserMode}
                         >
-                          Change Business Mode
+                          {user.biz
+                            ? "change to regular user"
+                            : "change to bussines user"}
                         </Button>
                         <Button
                           id={user._id}
