@@ -77,6 +77,9 @@ const ProfilePage = () => {
       if (joiResponse) {
         return;
       }
+      if (!inputState.zipCode) {
+        inputState.zipCode = 1;
+      }
       localStorage.setItem(
         "token",
         (await axios.put("/users/userInfo", reconfigurationUser(inputState)))

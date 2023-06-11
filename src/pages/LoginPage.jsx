@@ -41,6 +41,7 @@ const LoginPage = () => {
       navigate(ROUTES.HOME);
     } catch (err) {
       console.log("login error", err);
+      toast.error("🦄 bad password or email ");
     }
   };
   const handleInputChange = (ev) => {
