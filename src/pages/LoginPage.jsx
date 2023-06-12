@@ -40,7 +40,6 @@ const LoginPage = () => {
       //move to homepage
       navigate(ROUTES.HOME);
     } catch (err) {
-      console.log("login error", err);
       toast.error("🦄 bad password or email ");
     }
   };

@@ -5,7 +5,6 @@ import ROUTES from "./ROUTES";
 import LoginPage from "../pages/LoginPage";
 import EditCardPage from "../pages/EditCardPage";
 import ReRenderPage from "../pages/ReRenderPage/ReRenderPage";
-import UseMemoPage from "../pages/ReRenderPage/UseMemoPage";
 import RP1 from "../pages/RP1";
 import RP2 from "../pages/RP2";
 import ProtectedRoute from "../components/ProtectedRoute";
@@ -15,12 +14,8 @@ import LogoutPage from "../pages/LogoutPage";
 import NestedRoutePage from "../pages/NestedRoutePage/NestedRoutePage";
 import NestedPage1 from "../pages/NestedRoutePage/NestedPage1";
 import NestedPage2 from "../pages/NestedRoutePage/NestedPage2";
-import RRDPage1 from "../pages/RRDPage1";
-import RRDPage2 from "../pages/RRDPage2";
-import ProtectedRouteState from "../guard/ProtectedRouteState";
 import RegisterPage2 from "../pages/RegisterPage2/RegisterPage2";
 import AboutPage from "../pages/AboutPage";
-import CreateCardPage from "../pages/CreateCardPage";
 import FavoritesPage from "../pages/FavoritesPage";
 import MyCardPage from "../pages/MyCards";
 import SandboxPage from "../pages/SandboxPage";
@@ -28,8 +23,6 @@ import CardProfile from "../pages/CardProfilePage";
 import CreateCardForm from "../pages/CreateCardPage2";
 import ProfileDataPage from "../pages/ProfileDataPage";
 import UsersTable from "../pages/CRMPage";
-
-//element={<ProtectedRoute element={<LogoutPage />} />}
 
 const Router = () => {
   return (

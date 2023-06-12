@@ -86,12 +86,9 @@ const ProfilePage = () => {
           .data.token
       );
       loggedIn();
-      // Display a success message
       toast.success(`The update was successful`);
       navigate(ROUTES.HOME);
     } catch (err) {
-      console.log(err);
-      // Display an error message if the update fails
       toast.error(err.response.data);
     }
   };

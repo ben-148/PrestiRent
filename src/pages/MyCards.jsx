@@ -1,8 +1,8 @@
-import { Box, CircularProgress, Grid, Button, IconButton } from "@mui/material";
+import { Box, CircularProgress, Grid, IconButton } from "@mui/material";
 import { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import AddIcon from "@mui/icons-material/Add";
 import ROUTES from "../routes/ROUTES";
@@ -32,10 +32,9 @@ const MyCardPage = () => {
         );
       })
       .catch((err) => {
-        console.log("err from axios", err);
-        toast.error("Oops");
+        toast.error("something wrong");
       });
-  }, []);
+  }, [payload]);
 
   const handleDeleteFromInitialCardsArr = async (id) => {
     try {
@@ -45,7 +44,7 @@ const MyCardPage = () => {
       );
       toast.success("🦄 Card deleted :)");
     } catch (err) {
-      console.log("error when deleting", err.response.data);
+      toast.error("error when deleting", err.response.data);
     }
   };
 
@@ -71,7 +70,6 @@ const MyCardPage = () => {
   };
 
   const cardProfileClick = (id) => {
-    console.log("Clicked card id:", id);
     navigate(`/cardData/${id}`);
   };
 

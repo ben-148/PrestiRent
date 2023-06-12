@@ -5,7 +5,6 @@ import { useState } from "react";
 const InputField = ({ helperText, cols, onChange, showErrors, ...props }) => {
   const [touched, setTouched] = useState(false);
   const handleInputChange = (event) => {
-    console.log(event.target.id);
     setTouched(true);
     onChange(event);
   };

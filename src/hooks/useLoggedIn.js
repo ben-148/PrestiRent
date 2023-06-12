@@ -13,10 +13,7 @@ const useLoggedIn = () => {
       await axios.get("/users/userInfo");
       const payload = jwt_decode(token);
       dispatch(authActions.login(payload));
-    } catch (err) {
-      //server error
-      //invalid token
-    }
+    } catch (err) {}
   };
 };
 

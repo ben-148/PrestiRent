@@ -1,74 +1,86 @@
-# Getting Started with Create React App
+## Dear tester,
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+All the mandatory project requirements have been implemented, along with 4 out of 5 bonus requests. Please pay special attention to the bonus features during your evaluation.
 
-## Available Scripts
+# PrestiRent
 
-In the project directory, you can run:
+PrestiRent is a platform for renting prestige cars worldwide. This project aims to provide users with an easy and convenient way to rent high-end vehicles. This README file will guide you on how to set up and use the project.
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Make sure you have the following software installed on your machine:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Node.js (version X.X.X)
+- MongoDB (version X.X.X)
 
-### `npm test`
+## Getting Started
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+To get started with PrestiRent, follow the steps below:
 
-### `npm run build`
+1. Clone the repository to your local machine.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```shell
+git clone https://github.com/ben-148/benproject
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. Install the dependencies by navigating to the project directory and running the following command:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```shell
+   npm install
+```
 
-### `npm run eject`
+## SERVER
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Start the server by navigating to the "server" directory in Visual Studio Code and running the following command:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```shell
+   npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+4. Load the cards data and users from the provided JSON files.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+   - For the cards data, import the contents of "cards.json" into your MongoDB database.
+   - For the users data, import the contents of "users.json" into your MongoDB database.
 
-## Learn More
+   Note: Make sure your MongoDB server is running before importing the data.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+5. Once the server is running and the data is imported, go back to the project directory and start the application by running the following command:
+   npm start
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+6. Access the PrestiRent application in your web browser at [http://localhost:3000](http://localhost:3000).
 
-### Code Splitting
+## User Accounts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+PrestiRent provides three pre-created user accounts with different permissions:
 
-### Analyzing the Bundle Size
+1. email: **ben@gmail.com** - Admin and Biz User
+   password: **Nahnah210!**.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+   - Owner of 2 cards.
+   - Permissions: Full access to the site, including creating cards and deleting all card, can edit only the the cards that he is created.
+     admin have the permission to the CRM page, and manage the users from this area.
 
-### Making a Progressive Web App
+2. **matan@gmail.com** - Biz User
+   password: **Nahnah210!**.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+   - Permissions: Ability to create and cards and manange his own cards.
+   - Owner of 1 card.
 
-### Advanced Configuration
+3. **adir@gmail.com** - Simple User
+   password: **Nahnah210!**.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+   - Permissions: Can browse and view cards and mark them as favorites, but cannot create new cards.
 
-### Deployment
+Note: The password for all users is **Nahnah210!**. Use this password to log in with each user and test their respective abilities.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+## Additional Information
 
-### `npm run build` fails to minify
+- Make sure MongoDB is properly configured with the correct connection string in the server code (`server/index.js`) before running the server.
+- The PrestiRent project utilizes various technologies and frameworks, including React, Node.js, Express, and MongoDB.
+- Feel free to explore the codebase and make any modifications or improvements as needed.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Enjoy using PrestiRent and renting prestigious cars around the world! If you have any questions or need further assistance, please don't hesitate to reach out.
 
-### Link to slides
+```
 
-[Click here](https://docs.google.com/presentation/d/1Nof_WWcg-Tg_jncJvnNKR7JJ9GIfZ7U-kgOvqQzeKj8/edit?usp=sharing)
+```

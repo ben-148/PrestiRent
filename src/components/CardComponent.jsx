@@ -32,7 +32,6 @@ const CardComponent = ({
   isItUsersCard,
 }) => {
   const handleDeleteBtnClick = () => {
-    console.log("id", id);
     onDelete(id);
   };
   const handleEditBtnClick = () => {
@@ -93,7 +92,6 @@ const CardComponent = ({
           <Fragment>
             {isFav ? (
               <Button onClick={handleLikeBtnClick}>
-                {/* <FavoriteBorderIcon /> */}
                 <FavoriteIcon />
               </Button>
             ) : (

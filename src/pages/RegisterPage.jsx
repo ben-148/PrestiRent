@@ -187,20 +187,3 @@ const RegisterPage = () => {
   );
 };
 export default RegisterPage;
-/* <Button
-            disabled={enableRegister}
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleBtnClick}
-          >
-            Sign Up
-          </Button>
-          <Button
-            color="error"
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-            onClick={handleClearClick}
-            startIcon={<ClearIcon />}
-          >
-            Clear
-          </Button> */

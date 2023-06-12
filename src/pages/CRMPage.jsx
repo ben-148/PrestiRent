@@ -64,11 +64,9 @@ const CRMPage = () => {
       setUsers(newUsersArr);
     } catch (err) {
       toast.error("ERR: something went wrong.");
-      console.log(err);
     }
   };
   const whenUserClicked = (ev) => {
-    // console.log(ev.target.id);
     navigate(`${ROUTES.PROFILECRM}/${ev.target.id}`);
   };
   return (

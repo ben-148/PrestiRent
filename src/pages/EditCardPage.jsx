@@ -1,14 +1,12 @@
 import { useState, useEffect } from "react";
 import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import EditIcon from "@mui/icons-material/Edit";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import ROUTES from "../routes/ROUTES";
@@ -76,11 +74,9 @@ const EditCardPage = () => {
         if (!validateEditSchema(newInputState)) {
           setDisableEdit(false);
         }
-      } catch (err) {
-        console.log("error from axios", err);
-      }
+      } catch (err) {}
     })();
-  }, [id]);
+  }, [id, navigate]);
   const handleSaveBtnClick = async (ev) => {
     try {
       const joiResponse = validateEditSchema(inputState);
@@ -92,7 +88,6 @@ const EditCardPage = () => {
         navigate(ROUTES.HOME);
       }
     } catch (err) {
-      console.log("err", err.response.data);
       toast.error("error");
     }
   };

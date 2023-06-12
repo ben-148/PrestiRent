@@ -158,7 +158,15 @@ const CardProfile = () => {
                     </Button>
                   </Fragment>
                 ) : propOfCard === "web" ? (
-                  <Link href={cardState.web} underline="hover" target="_blank">
+                  <Link
+                    href={
+                      cardState.web.startsWith("http")
+                        ? cardState.web
+                        : `http://${cardState.web}`
+                    }
+                    underline="hover"
+                    target="_blank"
+                  >
                     Visit Website
                   </Link>
                 ) : propOfCard === "likes" ? (

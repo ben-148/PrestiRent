@@ -13,14 +13,9 @@ const ReRenderPage = () => {
   const handleTxtChange = (e) => {
     setTxt(e.target.value);
   };
-  // const handleBtn2Click = () => {
-  //   console.log("txt from handle btn 2", txt);
-  //   setTxt("");
-  // };
   const handleBtn2Click = useCallback(() => {
-    console.log("txt from handle btn 2", txt);
     setTxt("");
-  }, [txt]);
+  }, []);
   return (
     <Fragment>
       <h1>Re render page</h1>

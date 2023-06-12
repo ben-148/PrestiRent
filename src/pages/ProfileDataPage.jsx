@@ -51,10 +51,8 @@ const ProfileDataPage = () => {
         toast.error("ERR", err.response.data);
       });
   }, [id]);
-  const handleTopClick = (ev) => {
-    window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
-  };
-  const handleBizChange = async (ev) => {
+
+  const handleUser = async (ev) => {
     try {
       let newUsersArr = JSON.parse(JSON.stringify(usersArr));
       let currentUser = newUsersArr.find((user) => user._id === id);
@@ -83,7 +81,6 @@ const ProfileDataPage = () => {
       });
       setIsBiz(currentUser.biz);
     } catch (err) {
-      // toast.error("ERR" + err);
       console.log("ERR", err);
     }
   };
@@ -95,11 +92,7 @@ const ProfileDataPage = () => {
   }
   let profileKeys = Object.keys(profileState);
   return (
-    <Container
-      // style={{ backgroundColor: "#000044" }}
-      component="main"
-      maxWidth="lg"
-    >
+    <Container component="main" maxWidth="lg">
       <Button onClick={handleBackToCRMClick} color="error" variant="contained">
         <KeyboardReturnIcon />
       </Button>
@@ -125,11 +118,7 @@ const ProfileDataPage = () => {
                   ""
                 ) : (
                   <Fragment>
-                    <Typography
-                      // style={{ backgroundColor: "#00002b" }}
-                      component="h5"
-                      variant="h5"
-                    >
+                    <Typography component="h5" variant="h5">
                       {key === "isAdmin" || key === "biz"
                         ? profileState[key]
                           ? `${key}: yes`

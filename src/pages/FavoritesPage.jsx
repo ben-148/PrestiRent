@@ -21,7 +21,6 @@ const FavoritesPage = () => {
         setCardsArr(data);
       })
       .catch((err) => {
-        console.log("err from axios", err);
         toast.error("Oops");
       });
   }, []);
@@ -33,9 +32,7 @@ const FavoritesPage = () => {
         newCardsArr.filter((item) => item._id !== id)
       );
       toast.success("🦄 Card deleted :)");
-    } catch (err) {
-      console.log("error when deleting", err.response.data);
-    }
+    } catch (err) {}
   };
 
   const handleDeleteFromFavorites = async (id) => {
@@ -44,7 +41,6 @@ const FavoritesPage = () => {
       setCardsArr((prevArr) => prevArr.filter((card) => card._id !== id));
       toast.success("Card deleted successfully");
     } catch (err) {
-      console.log("Error deleting card", err.response.data);
       toast.error("Failed to delete card");
     }
   };
@@ -54,7 +50,6 @@ const FavoritesPage = () => {
   };
 
   const cardProfileClick = (id) => {
-    console.log("Clicked card id:", id);
     navigate(`/cardData/${id}`);
   };
 

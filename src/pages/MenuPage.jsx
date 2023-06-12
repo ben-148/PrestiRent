@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Button from "@mui/material/Button";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Fade from "@mui/material/Fade";
@@ -16,7 +15,6 @@ const MenuPage = () => {
 
   return (
     <div>
-      {/* <Button onClick={handleClick}>Dashboard</Button> */}
       <IconButton onClick={handleClick}>
         <Avatar src="https://images.freeimages.com/images/previews/ac9/railway-hdr-1361893.jpg" />
       </IconButton>

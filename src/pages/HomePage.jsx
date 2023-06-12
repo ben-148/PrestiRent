@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Grid, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import CardComponent from "../components/CardComponent";
@@ -17,17 +17,42 @@ const HomePage = () => {
   let qparams = useQueryParams();
   const payload = useSelector((bigPie) => bigPie.authSlice.payload);
 
+  const filterFunc = useCallback(
+    (data) => {
+      if (!originalCardsArr && !data) {
+        return;
+      }
+      let filter = "";
+      if (qparams.filter) {
+        filter = qparams.filter;
+      }
+      if (!originalCardsArr && data) {
+        setOriginalCardsArr(data);
+        setCardsArr(
+          data.filter(
+            (card) =>
+              card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
+          )
+        );
+        return;
+      }
+      if (originalCardsArr) {
+        let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
+        setCardsArr(
+          newOriginalCardsArr.filter(
+            (card) =>
+              card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
+          )
+        );
+      }
+    },
+    [originalCardsArr, qparams.filter]
+  );
+
   useEffect(() => {
-    /*
-      useEffect cant handle async ()=>{}
-      this is why we use the old promise way
-    */
     axios
       .get("/cards/cards")
       .then(({ data }) => {
-        // console.log("data", data);
-        // setCardsArr(data);
-
         filterFunc(data);
         setFavoriteStatus(
           data.reduce(
@@ -40,61 +65,22 @@ const HomePage = () => {
         );
       })
       .catch((err) => {
-        console.log("err from axios", err);
-
-        toast.error("Oops");
+        toast.error("something wrong");
       });
-  }, []);
-  const filterFunc = (data) => {
-    if (!originalCardsArr && !data) {
-      return;
-    }
-    let filter = "";
-    if (qparams.filter) {
-      filter = qparams.filter;
-    }
-    if (!originalCardsArr && data) {
-      /*
-        when component loaded and states not loaded
-      */
-      setOriginalCardsArr(data);
-      setCardsArr(
-        data.filter(
-          (card) =>
-            card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
-        )
-      );
-      return;
-    }
-    if (originalCardsArr) {
-      /*
-        when all loaded and states loaded
-      */
-      let newOriginalCardsArr = JSON.parse(JSON.stringify(originalCardsArr));
-      setCardsArr(
-        newOriginalCardsArr.filter(
-          (card) =>
-            card.title.startsWith(filter) || card.bizNumber.startsWith(filter)
-        )
-      );
-    }
-  };
+  }, [filterFunc, payload?._id]);
+
   useEffect(() => {
     filterFunc();
-  }, [qparams.filter]);
-
+  }, [filterFunc, qparams.filter]);
   const handleDeleteFromInitialCardsArr = async (id) => {
-    // let newCardsArr = JSON.parse(JSON.stringify(cardsArr));
-    // newCardsArr =newCardsArr.filterr((item) => item.id != id);
-    // setCardsArr(newCardsArsr);
     try {
       await axios.delete("/cards/" + id); // /cards/:id
       setCardsArr((newCardsArr) =>
-        newCardsArr.filter((item) => item._id != id)
+        newCardsArr.filter((item) => item._id !== id)
       );
       toast.success("🦄 Card deleted :) ");
     } catch (err) {
-      console.log("error when deleting", err.response.data);
+      toast.error(err.response.data);
     }
   };
   const handleLikeFromInitialCardsArr = async (id) => {
@@ -110,15 +96,14 @@ const HomePage = () => {
         : "🦄 Card removed from favorites ";
       toast.success(toastMessage);
     } catch (err) {
-      console.log("error when liking", err.response.data);
+      toast.error("error when liking", err.response.data);
     }
   };
   const handleEditFromInitialCardsArr = (id) => {
-    navigate(`/edit/${id}`); //localhost:3000/edit/123213
+    navigate(`/edit/${id}`);
   };
 
   const cardProfileClick = (id) => {
-    console.log("Clicked card id:", id);
     navigate(`/cardData/${id}`);
   };
 
@@ -127,10 +112,6 @@ const HomePage = () => {
   }
 
   return (
-    /*     <Box>
-      <h1>PrestiRent</h1>
-      <h2>Elevate Your Journey in Style</h2>
- */
     <Box textAlign="center">
       <Typography
         variant="h1"
@@ -142,7 +123,6 @@ const HomePage = () => {
         variant="h2"
         style={{
           fontFamily: "'Playfair Display', serif",
-          // marginBottom: "16px",
         }}
       >
         Elevate Your Journey in Style

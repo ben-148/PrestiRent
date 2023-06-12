@@ -5,7 +5,6 @@ import ROUTES from "../routes/ROUTES";
 
 const ProtectedRouteState = ({ element }) => {
   let location = useLocation();
-  console.log("location from protected", location);
   //* logic section
   const isLoggedIn = useSelector((bigState) => bigState.authSlice.isLoggedIn);
   const payload = useSelector((bigState) => bigState.authSlice.payload);
