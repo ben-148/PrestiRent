@@ -1,5 +1,6 @@
 ## Dear tester,
 
+i added to the project folder the pdf with all the project requirements,
 All the mandatory project requirements have been implemented, along with 4 out of 5 bonus requests. Please pay special attention to the bonus features during your evaluation.
 
 # PrestiRent
