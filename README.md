@@ -45,7 +45,10 @@ git clone https://github.com/ben-148/benproject
    Note: Make sure your MongoDB server is running before importing the data.
 
 5. Once the server is running and the data is imported, go back to the project directory and start the application by running the following command:
+
+```shell
    npm start
+```
 
 6. Access the PrestiRent application in your web browser at [http://localhost:3000](http://localhost:3000).
 
